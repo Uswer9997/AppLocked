@@ -113,10 +113,9 @@ namespace AppLocked.Infrastructure
     /// <param name="events"></param>
     private void AddEvents(object events)
     {
-      TEvent[] addingEvents = events as TEvent[];
-      //Events.AddRange(addedEvents);
+      MyEvent[] addingEvents = events as MyEvent[];
+
       if (AddingEvents != null)
-      //AddingEvents.Invoke(this, new OrionServiceEventAddinEventArgs(addingEvents));
       {
         Console.WriteLine("Начали вызывать событие Invoke");
         if (System.Threading.Thread.CurrentThread.Name == null)
