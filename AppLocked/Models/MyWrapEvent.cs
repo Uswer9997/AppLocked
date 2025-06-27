@@ -8,12 +8,6 @@ namespace AppLocked.Models
     public string EventName { get; set; }
     public string Description { get; set; }
 
-    public MyWrapEvent(MyEvent baseEvent)
-    {
-      EventDate = baseEvent.EventDate;
-      EventName = baseEvent.EventName;
-      Description = baseEvent.Description;
-    }
+
   }
-}
 }

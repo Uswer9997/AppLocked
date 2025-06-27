@@ -9,7 +9,7 @@ namespace AppLocked.ViewModels
     private Infrastructure.TimerService _timerService;
 
     /// <summary>
-    /// События выбрасываемые из таймера, преобразованные.
+    /// События выбрасываемые из таймера, но уже преобразованные.
     /// </summary>
     public ObservableCollection<MyWrapEvent> Events { get; private set; }
 
@@ -19,6 +19,7 @@ namespace AppLocked.ViewModels
       Events = new ObservableCollection<MyWrapEvent>();
 
       _timerService = new Infrastructure.TimerService(System.Threading.SynchronizationContext.Current);
+      _timerService.GenerationInterval = 5;
       _timerService.AddingEvents += OnAddingEvents;
     }
     #endregion
@@ -30,7 +31,12 @@ namespace AppLocked.ViewModels
       foreach (MyEvent elEvent in _timerService.Events)
       {
         // создадим объект 'события' на основе новых данных
-        MyWrapEvent _wrapEvent = new MyWrapEvent(elEvent);
+        MyWrapEvent _wrapEvent = new MyWrapEvent()
+        {
+          EventDate = elEvent.EventDate,
+          EventName = elEvent.EventName,
+          Description = elEvent.Description
+        };
 
         lock (locker)
         {

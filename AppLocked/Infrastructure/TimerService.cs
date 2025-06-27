@@ -55,11 +55,14 @@ namespace AppLocked.Infrastructure
     /// </summary>
     private System.Threading.SynchronizationContext _synchronizationContext;
 
+
+
     #region Constructor
 
     public TimerService(System.Threading.SynchronizationContext synchronizationContext)
     {
       _synchronizationContext = synchronizationContext;
+      locker = new object();
 
       checkTimer = new System.Timers.Timer();
       GenerationInterval = 10; // default value
@@ -88,12 +91,15 @@ namespace AppLocked.Infrastructure
                                             new MyEvent() { EventDate = DateTime.Now,
                                                             Description = "Тестовое событие",
                                                             EventName = (counter++).ToString() } };
-        // Выполним метод в потоке синхронизации
-        Console.WriteLine("Данные записали в свойство");
+
         if (System.Threading.Thread.CurrentThread.Name == null)
           System.Threading.Thread.CurrentThread.Name = "Timer thread";
         Console.WriteLine(System.Threading.Thread.CurrentThread.Name);
+
+        Console.WriteLine("Вызываем метод Post");
+        // Выполним метод в потоке синхронизации
         _synchronizationContext?.Post(AddEvents, nEvents);
+
         Console.WriteLine("Метод Post отработал");
       }
       catch (Exception ex)
@@ -117,12 +123,17 @@ namespace AppLocked.Infrastructure
 
       if (AddingEvents != null)
       {
-        Console.WriteLine("Начали вызывать событие Invoke");
         if (System.Threading.Thread.CurrentThread.Name == null)
           System.Threading.Thread.CurrentThread.Name = "AddEvents metod thread";
         Console.WriteLine(System.Threading.Thread.CurrentThread.Name);
+
+        Console.WriteLine("Начали записывать данные в свойство");
+        Events = addingEvents;
+        Console.WriteLine("Данные записали в свойство");
+
+        Console.WriteLine("Начали вызывать событие через Invoke");
         AddingEvents.Invoke(this, EventArgs.Empty); // просто сигнал о налиции данных
-        Console.WriteLine("Закончили вызывать событие Invoke");
+        Console.WriteLine("Закончили вызывать событие через Invoke");
       }
     }
 
