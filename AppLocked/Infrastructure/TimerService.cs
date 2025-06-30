@@ -58,7 +58,6 @@ namespace AppLocked.Infrastructure
 
 
     #region Constructor
-
     public TimerService(System.Threading.SynchronizationContext synchronizationContext)
     {
       _synchronizationContext = synchronizationContext;
@@ -102,7 +101,7 @@ namespace AppLocked.Infrastructure
 
         Console.WriteLine("Метод Post отработал");
       }
-      catch (Exception ex)
+      catch
       {
         // тут выброс в поток синхронизации, а пока так
       }
